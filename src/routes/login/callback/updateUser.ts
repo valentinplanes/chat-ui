@@ -16,7 +16,7 @@ export async function updateUser(params: {
 		preferred_username: username,
 		name,
 		email,
-		picture: avatarUrl,
+//		picture: avatarUrl,
 		sub: hfUserId,
 	} = z
 		.object({
@@ -38,7 +38,7 @@ export async function updateUser(params: {
 		// update existing user if any
 		await collections.users.updateOne(
 			{ _id: existingUser._id },
-			{ $set: { username, name, avatarUrl } }
+			{ $set: { username, name } }//, avatarUrl } }
 		);
 		// refresh session cookie
 		refreshSessionCookie(cookies, existingUser.sessionId);
@@ -51,7 +51,7 @@ export async function updateUser(params: {
 			username,
 			name,
 			email,
-			avatarUrl,
+//			avatarUrl,
 			hfUserId,
 			sessionId: locals.sessionId,
 		});

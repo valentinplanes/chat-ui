@@ -9,7 +9,7 @@ import { defaultModel } from "$lib/server/models";
 const userData = {
 	preferred_username: "new-username",
 	name: "name",
-	picture: "https://example.com/avatar.png",
+//	picture: "https://example.com/avatar.png",
 	sub: "1234567890",
 };
 
@@ -30,7 +30,7 @@ const insertRandomUser = async () => {
 		updatedAt: new Date(),
 		username: "base-username",
 		name: userData.name,
-		avatarUrl: userData.picture,
+//		avatarUrl: userData.picture,
 		hfUserId: userData.sub,
 		sessionId: locals.sessionId,
 	});

@@ -22,7 +22,13 @@ import { runWebSearch } from "$lib/server/websearch/runWebSearch";
 import type { WebSearch } from "$lib/types/WebSearch";
 import { abortedGenerations } from "$lib/server/abortedGenerations";
 import { summarize } from "$lib/server/summarize";
+import { Langfuse } from "langfuse";
 
+const langfuse = new Langfuse({
+  secretKey: process.env.LANGFUSE_SECRET_KEY || 'default_secret_key',
+  publicKey: process.env.LANGFUSE_PUBLIC_KEY || 'default_public_key',
+  baseUrl:   process.env.LANGFUSE_URL        || 'default_base_url',
+});
 export async function POST({ request, fetch, locals, params, getClientAddress }) {
 	const id = z.string().parse(params.id);
 	const convId = new ObjectId(id);
@@ -213,6 +219,23 @@ export async function POST({ request, fetch, locals, params, getClientAddress })
 						type: "finalAnswer",
 						text: generated_text,
 					});
+					const trace = langfuse.trace({
+								name: "chat-ui-session",
+								userId: userId,
+								metadata: { env: "int" },
+							});
+						trace.event({ name: "saveMessage" });
+						const span = trace.span({ name: "chat-interaction" });
+						const generation = trace.generation({
+								name: "chat-completion",
+								model: "vicuna",
+								modelParameters: {
+									temperature: 0.2,
+									maxTokens: 1024,
+								},
+								prompt: messages,
+						});
+						await langfuse.shutdownAsync();
 				}
 			}
 

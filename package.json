@@ -41,6 +41,7 @@
 	},
 	"type": "module",
 	"dependencies": {
+		"langfuse": "^1.0.21",
 		"@huggingface/hub": "^0.5.1",
 		"@huggingface/inference": "^2.2.0",
 		"@xenova/transformers": "^2.6.0",
