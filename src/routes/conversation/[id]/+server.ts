@@ -29,6 +29,7 @@ const langfuse = new Langfuse({
   publicKey: process.env.LANGFUSE_PUBLIC_KEY || 'default_public_key',
   baseUrl:   process.env.LANGFUSE_URL        || 'default_base_url',
 });
+
 export async function POST({ request, fetch, locals, params, getClientAddress }) {
 	const id = z.string().parse(params.id);
 	const convId = new ObjectId(id);
@@ -222,16 +223,16 @@ export async function POST({ request, fetch, locals, params, getClientAddress })
 					const trace = langfuse.trace({
 								name: "chat-ui-session",
 								userId: userId,
-								metadata: { env: "int" },
+								metadata: { env: model?.id },
 							});
-						trace.event({ name: "saveMessage" });
+						trace.event({ name: "finalAnswer" });
 						const span = trace.span({ name: "chat-interaction" });
 						const generation = trace.generation({
 								name: "chat-completion",
-								model: "vicuna",
+								model: model?.name,
 								modelParameters: {
-									temperature: 0.2,
-									maxTokens: 1024,
+									temperature: model?.parameters?.temperature,
+									maxTokens: model?.parameters?.max_new_tokens,
 								},
 								prompt: messages,
 						});
