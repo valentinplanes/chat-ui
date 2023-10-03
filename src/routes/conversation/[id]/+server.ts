@@ -148,9 +148,9 @@ export async function POST({ request, fetch, locals, params, getClientAddress })
 
 			let webSearchResults: WebSearch | undefined;
 
-			if (webSearch) {
-				webSearchResults = await runWebSearch(conv, newPrompt, update);
-			}
+			// if (webSearch) {
+			// 	webSearchResults = await runWebSearch(conv, newPrompt, update);
+			// }
 
 			// we can now build the prompt using the messages
 			const prompt = await buildPrompt({
